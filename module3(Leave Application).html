@@ -1,0 +1,46 @@
+<!--
+Module Name: Leave Application Module
+Description: Enables faculty to apply for leave by selecting leave type, dates, and reason.
+Submitted leave requests are sent for approval.
+-->
+<!DOCTYPE html>
+<html>
+<head>
+<title>Leave Application</title>
+<style>
+body{font-family:Arial;background:#eef}
+.box{width:400px;margin:80px auto;background:#fff;padding:20px}
+input,select,textarea,button{width:100%;margin:6px 0;padding:8px}
+button{background:#007bff;color:white;border:none}
+</style>
+</head>
+<body>
+<div class="box">
+<h2>Apply Leave</h2>
+<select id="type">
+<option value="">Leave Type</option>
+<option>Casual</option>
+<option>Sick</option>
+<option>Earned</option>
+</select>
+<input type="date" id="from">
+<input type="date" id="to">
+<textarea id="reason" placeholder="Reason"></textarea>
+<button onclick="apply()">Submit</button>
+<p id="msg"></p>
+</div>
+
+<script>
+function apply(){
+ if(!type.value||!from.value||!to.value||!reason.value){
+  msg.innerText="All fields required"; return;
+ }
+ let leave={type:type.value,from:from.value,to:to.value,reason:reason.value,status:"PENDING"};
+ let arr=JSON.parse(localStorage.getItem("leaves"))||[];
+ arr.push(leave);
+ localStorage.setItem("leaves",JSON.stringify(arr));
+ msg.innerText="Leave Applied Successfully";
+}
+</script>
+</body>
+</html>
