@@ -1,0 +1,26 @@
+<!--
+Module Name: Reports & History Module
+Description: Provides leave history and reports for faculty and admin users.
+Allows viewing past leave records and generating summaries.
+-->
+<!DOCTYPE html>
+<html>
+<head>
+<title>Leave History</title>
+<style>
+body{font-family:Arial;background:#f4f4f4}
+.box{width:500px;margin:60px auto;background:#fff;padding:20px}
+</style>
+</head>
+<body>
+<div class="box">
+<h2>Leave History</h2>
+<div id="history"></div>
+</div>
+
+<script>
+let leaves=JSON.parse(localStorage.getItem("leaves"))||[];
+history.innerHTML=leaves.map(l=>`${l.type} - ${l.status}<br>`).join("");
+</script>
+</body>
+</html>
