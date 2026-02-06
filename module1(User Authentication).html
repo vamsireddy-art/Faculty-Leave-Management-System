@@ -1,0 +1,175 @@
+<!--
+Module Name: User & Authentication Module
+Description: Handles user login, logout, and authentication for faculty and admin users.
+Ensures only authorized users can access the system.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Faculty Leave Management System - Auth Module</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+        }
+
+        .container {
+            width: 350px;
+            margin: 100px auto;
+            background: #ffffff;
+            padding: 20px;
+            box-shadow: 0 0 10px gray;
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        h2, h3 {
+            margin-bottom: 15px;
+        }
+
+        input, select {
+            width: 90%;
+            padding: 8px;
+            margin: 8px 0;
+        }
+
+        button {
+            width: 95%;
+            padding: 8px;
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        a {
+            color: #007bff;
+            cursor: pointer;
+        }
+
+        #msg {
+            color: red;
+            margin-top: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<!-- LOGIN PAGE -->
+<div class="container" id="loginPage">
+    <h2>Faculty Leave Management System</h2>
+    <h3>Login</h3>
+
+    <input type="email" id="loginEmail" placeholder="Email">
+    <input type="password" id="loginPassword" placeholder="Password">
+
+    <button onclick="login()">Login</button>
+
+    <p id="loginMsg"></p>
+    <p>New user? <a onclick="showRegister()">Register</a></p>
+</div>
+
+<!-- REGISTER PAGE -->
+<div class="container hidden" id="registerPage">
+    <h3>User Registration</h3>
+
+    <input type="text" id="regName" placeholder="Full Name">
+    <input type="email" id="regEmail" placeholder="Email">
+    <input type="password" id="regPassword" placeholder="Password">
+
+    <select id="regRole">
+        <option value="">Select Role</option>
+        <option value="FACULTY">Faculty</option>
+        <option value="ADMIN">Admin</option>
+    </select>
+
+    <button onclick="register()">Register</button>
+
+    <p id="registerMsg"></p>
+    <p>Already registered? <a onclick="showLogin()">Login</a></p>
+</div>
+
+<!-- DASHBOARD PAGE -->
+<div class="container hidden" id="dashboardPage">
+    <h2>Dashboard</h2>
+    <p id="userInfo"></p>
+    <button onclick="logout()">Logout</button>
+</div>
+
+<script>
+    function showRegister() {
+        document.getElementById("loginPage").classList.add("hidden");
+        document.getElementById("registerPage").classList.remove("hidden");
+    }
+
+    function showLogin() {
+        document.getElementById("registerPage").classList.add("hidden");
+        document.getElementById("loginPage").classList.remove("hidden");
+    }
+
+    function register() {
+        let name = document.getElementById("regName").value;
+        let email = document.getElementById("regEmail").value;
+        let password = document.getElementById("regPassword").value;
+        let role = document.getElementById("regRole").value;
+
+        if (!name || !email || !password || !role) {
+            document.getElementById("registerMsg").innerText = "All fields are required";
+            return;
+        }
+
+        alert("Registration successful (Frontend only)");
+        showLogin();
+    }
+
+    function login() {
+        let email = document.getElementById("loginEmail").value;
+        let password = document.getElementById("loginPassword").value;
+
+        if (!email || !password) {
+            document.getElementById("loginMsg").innerText = "Enter email and password";
+            return;
+        }
+
+        localStorage.setItem("user", email);
+        showDashboard();
+    }
+
+    function showDashboard() {
+        document.getElementById("loginPage").classList.add("hidden");
+        document.getElementById("registerPage").classList.add("hidden");
+        document.getElementById("dashboardPage").classList.remove("hidden");
+
+        let user = localStorage.getItem("user");
+        document.getElementById("userInfo").innerText = "Logged in as: " + user;
+    }
+
+    function logout() {
+        localStorage.removeItem("user");
+        showLogin();
+        document.getElementById("dashboardPage").classList.add("hidden");
+    }
+
+    // Auto login if session exists
+    window.onload = function () {
+        if (localStorage.getItem("user")) {
+            showDashboard();
+        }
+    };
+</script>
+
+</body>
+</html>
+
+
