@@ -1,0 +1,134 @@
+<!--
+Module Name: Faculty Profile Management Module
+Description: Allows faculty members to view and update their personal and professional details.
+Includes profile information such as name, department, and contact details.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Faculty Profile Management - FLMS</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+        }
+
+        .container {
+            width: 420px;
+            margin: 80px auto;
+            background: #ffffff;
+            padding: 20px;
+            box-shadow: 0 0 10px gray;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 15px;
+        }
+
+        input, select {
+            width: 92%;
+            padding: 8px;
+            margin: 6px 0;
+        }
+
+        button {
+            width: 95%;
+            padding: 8px;
+            margin-top: 10px;
+            background: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1e7e34;
+        }
+
+        .secondary {
+            background: #007bff;
+        }
+
+        .secondary:hover {
+            background: #0056b3;
+        }
+
+        #msg {
+            margin-top: 10px;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Faculty Profile</h2>
+
+    <input type="text" id="name" placeholder="Full Name">
+    <input type="email" id="email" placeholder="Email" disabled>
+    <input type="text" id="department" placeholder="Department">
+    <input type="text" id="designation" placeholder="Designation">
+    <input type="text" id="phone" placeholder="Phone Number">
+
+    <button onclick="updateProfile()">Update Profile</button>
+    <button class="secondary" onclick="goBack()">Back to Dashboard</button>
+
+    <p id="msg"></p>
+</div>
+
+<script>
+    // Load profile data (frontend simulation)
+    window.onload = function () {
+        let profile = JSON.parse(localStorage.getItem("facultyProfile"));
+
+        if (profile) {
+            document.getElementById("name").value = profile.name;
+            document.getElementById("email").value = profile.email;
+            document.getElementById("department").value = profile.department;
+            document.getElementById("designation").value = profile.designation;
+            document.getElementById("phone").value = profile.phone;
+        } else {
+            // Default data (simulating logged-in user)
+            document.getElementById("email").value = localStorage.getItem("user") || "faculty@college.edu";
+        }
+    };
+
+    function updateProfile() {
+        let name = document.getElementById("name").value;
+        let email = document.getElementById("email").value;
+        let department = document.getElementById("department").value;
+        let designation = document.getElementById("designation").value;
+        let phone = document.getElementById("phone").value;
+
+        if (!name || !department || !designation || !phone) {
+            document.getElementById("msg").style.color = "red";
+            document.getElementById("msg").innerText = "All fields are required";
+            return;
+        }
+
+        let profileData = {
+            name: name,
+            email: email,
+            department: department,
+            designation: designation,
+            phone: phone
+        };
+
+        localStorage.setItem("facultyProfile", JSON.stringify(profileData));
+
+        document.getElementById("msg").style.color = "green";
+        document.getElementById("msg").innerText = "Profile updated successfully";
+    }
+
+    function goBack() {
+        alert("Redirecting to Dashboard (UI only)");
+    }
+</script>
+
+</body>
+</html>
+
