@@ -1,0 +1,40 @@
+<!--
+Module Name: Leave Approval Workflow Module
+Description: Allows authorized users (HOD/Admin) to approve or reject leave requests.
+Displays pending, approved, and rejected leave applications.
+-->
+<!DOCTYPE html>
+<html>
+<head>
+<title>Leave Approval</title>
+<style>
+body{font-family:Arial;background:#f4f4f4}
+.box{width:500px;margin:60px auto;background:#fff;padding:20px}
+button{margin:4px}
+</style>
+</head>
+<body>
+<div class="box">
+<h2>Pending Leave Requests</h2>
+<div id="list"></div>
+</div>
+
+<script>
+let leaves=JSON.parse(localStorage.getItem("leaves"))||[];
+let html="";
+leaves.forEach((l,i)=>{
+ html+=`<p>${l.type} (${l.from} to ${l.to})
+ <button onclick="approve(${i})">Approve</button>
+ <button onclick="reject(${i})">Reject</button></p>`;
+});
+list.innerHTML=html;
+
+function approve(i){leaves[i].status="APPROVED";save();}
+function reject(i){leaves[i].status="REJECTED";save();}
+function save(){
+ localStorage.setItem("leaves",JSON.stringify(leaves));
+ location.reload();
+}
+</script>
+</body>
+</html>
