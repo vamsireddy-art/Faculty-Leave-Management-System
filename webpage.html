@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Faculty Leave Management System</title>
+
+<!-- Font Awesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #f3f4f7, #e3e7ed);
+}
+
+/* ===== NAVBAR ===== */
+nav {
+    background: #0f2027;
+    color: white;
+    padding: 12px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+nav h2 {
+    margin: 0;
+    font-size: 20px;
+}
+nav button {
+    background: #2575fc;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* ===== HEADER ===== */
+header {
+    background: linear-gradient(90deg, #0f2027, #203a43, #2c5364);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+
+/* ===== CONTENT ===== */
+.container {
+    padding: 40px;
+}
+h3 {
+    text-align: center;
+    color: #203a43;
+    margin-bottom: 30px;
+}
+
+/* ===== MODULE GRID ===== */
+.modules {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: white;
+    padding: 30px 20px;
+    border-radius: 14px;
+    text-align: center;
+    font-weight: bold;
+    color: #2c5364;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.card i {
+    font-size: 32px;
+    margin-bottom: 12px;
+    display: block;
+}
+.card:hover {
+    background: #2c5364;
+    color: white;
+    transform: translateY(-6px);
+}
+
+/* ===== FOOTER ===== */
+footer {
+    margin-top: 40px;
+    background: #0f2027;
+    color: white;
+    text-align: center;
+    padding: 15px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav>
+    <h2>FLMS Dashboard</h2>
+    <button onclick="toggleRole()">Switch Role</button>
+</nav>
+
+<!-- ===== HEADER ===== -->
+<header>
+    <h1>Faculty Leave Management System</h1>
+    <p>AMSD Project – Dashboard</p>
+    <p><b>Current Role:</b> <span id="roleText">Faculty</span></p>
+</header>
+
+<!-- ===== MODULES ===== -->
+<div class="container">
+    <h3>System Modules</h3>
+
+    <div class="modules">
+
+        <!-- FACULTY MODULES -->
+        <div class="card faculty" onclick="openModule('module1(User Authentication).html')">
+            <i class="fa-solid fa-user-lock"></i>User Authentication
+        </div>
+
+        <div class="card faculty" onclick="openModule('module2(Faculty profile).html')">
+            <i class="fa-solid fa-id-card"></i>Faculty Profile
+        </div>
+
+        <div class="card faculty" onclick="openModule('module3(Leave Application).html')">
+            <i class="fa-solid fa-file-pen"></i>Leave Application
+        </div>
+
+        <div class="card faculty" onclick="openModule('module5(Leave Balance).html')">
+            <i class="fa-solid fa-scale-balanced"></i>Leave Balance
+        </div>
+
+        <div class="card faculty" onclick="openModule('module8(History).html')">
+            <i class="fa-solid fa-clock-rotate-left"></i>History
+        </div>
+
+        <!-- ADMIN MODULES -->
+        <div class="card admin" onclick="openModule('module4(Leave Approval).html')">
+            <i class="fa-solid fa-circle-check"></i>Leave Approval
+        </div>
+
+        <div class="card admin" onclick="openModule('module6(Academic Calendar).html')">
+            <i class="fa-solid fa-calendar-days"></i>Academic Calendar
+        </div>
+
+        <div class="card admin" onclick="openModule('module7(Notifications).html')">
+            <i class="fa-solid fa-bell"></i>Notifications
+        </div>
+
+        <div class="card admin" onclick="openModule('module9(Admin Management).html')">
+            <i class="fa-solid fa-user-gear"></i>Admin Management
+        </div>
+
+        <div class="card admin" onclick="openModule('module10(Security & Audit).html')">
+            <i class="fa-solid fa-shield-halved"></i>Security & Audit
+        </div>
+
+    </div>
+</div>
+
+<footer>
+    © 2026 Faculty Leave Management System | AMSD
+</footer>
+
+<script>
+let role = "faculty";
+
+function openModule(fileName) {
+    window.location.href = encodeURI(fileName);
+}
+
+function toggleRole() {
+    role = role === "faculty" ? "admin" : "faculty";
+    document.getElementById("roleText").innerText =
+        role.charAt(0).toUpperCase() + role.slice(1);
+
+    document.querySelectorAll(".faculty").forEach(el =>
+        el.style.display = role === "faculty" ? "block" : "none"
+    );
+    document.querySelectorAll(".admin").forEach(el =>
+        el.style.display = role === "admin" ? "block" : "none"
+    );
+}
+
+// Default load
+toggleRole(); toggleRole();
+</script>
+
+</body>
+</html>
