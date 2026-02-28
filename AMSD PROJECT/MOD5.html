@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Leave Balance - FLMS</title>
+
+<!-- React + Babel CDN -->
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<style>
+body {
+    font-family: Arial;
+    background: #eef;
+}
+
+.box {
+    width: 350px;
+    margin: 80px auto;
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0 0 8px gray;
+}
+</style>
+</head>
+
+<body>
+
+<div id="root"></div>
+
+<script type="text/babel">
+function LeaveBalance() {
+
+    const TOTAL = {
+        Casual: 10,
+        Sick: 8,
+        Earned: 15
+    };
+
+    const [balance, setBalance] = React.useState(TOTAL);
+
+    React.useEffect(() => {
+        const leaves = JSON.parse(localStorage.getItem("leaves")) || [];
+
+        let used = { Casual: 0, Sick: 0, Earned: 0 };
+
+        leaves.forEach(l => {
+            if (l.status === "APPROVED") {
+                const days =
+                    (new Date(l.to) - new Date(l.from)) /
+                    (1000 * 60 * 60 * 24) + 1;
+
+                used[l.type] += days;
+            }
+        });
+
+        setBalance({
+            Casual: TOTAL.Casual - used.Casual,
+            Sick: TOTAL.Sick - used.Sick,
+            Earned: TOTAL.Earned - used.Earned
+        });
+    }, []);
+
+    return (
+        <div className="box">
+            <h2>Leave Balance</h2>
+            <p>Casual: <b>{balance.Casual}</b></p>
+            <p>Sick: <b>{balance.Sick}</b></p>
+            <p>Earned: <b>{balance.Earned}</b></p>
+        </div>
+    );
+}
+
+ReactDOM.createRoot(document.getElementById("root"))
+    .render(<LeaveBalance />);
+</script>
+
+</body>
+</html>

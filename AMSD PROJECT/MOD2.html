@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Faculty Profile Management - FLMS</title>
+
+<!-- React & Babel CDN -->
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #eef2f7;
+}
+
+.container {
+    width: 420px;
+    margin: 80px auto;
+    background: #ffffff;
+    padding: 20px;
+    box-shadow: 0 0 10px gray;
+    border-radius: 5px;
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 15px;
+}
+
+input {
+    width: 92%;
+    padding: 8px;
+    margin: 6px 0;
+}
+
+button {
+    width: 95%;
+    padding: 8px;
+    margin-top: 10px;
+    background: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #1e7e34;
+}
+
+.secondary {
+    background: #007bff;
+}
+
+.secondary:hover {
+    background: #0056b3;
+}
+
+.msg {
+    margin-top: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="root"></div>
+
+<script type="text/babel">
+function FacultyProfile() {
+
+    const [profile, setProfile] = React.useState({
+        name: "",
+        email: "",
+        department: "",
+        designation: "",
+        phone: ""
+    });
+
+    const [msg, setMsg] = React.useState("");
+    const [msgColor, setMsgColor] = React.useState("green");
+
+    // Load profile on page load
+    React.useEffect(() => {
+        const savedProfile = JSON.parse(localStorage.getItem("facultyProfile"));
+        const loggedUser = localStorage.getItem("user") || "faculty@college.edu";
+
+        if (savedProfile) {
+            setProfile(savedProfile);
+        } else {
+            setProfile(prev => ({ ...prev, email: loggedUser }));
+        }
+    }, []);
+
+    const updateProfile = () => {
+        const { name, department, designation, phone } = profile;
+
+        if (!name || !department || !designation || !phone) {
+            setMsgColor("red");
+            setMsg("All fields are required");
+            return;
+        }
+
+        localStorage.setItem("facultyProfile", JSON.stringify(profile));
+        setMsgColor("green");
+        setMsg("Profile updated successfully");
+    };
+
+    const goBack = () => {
+        alert("Redirecting to Dashboard (UI only)");
+    };
+
+    return (
+        <div className="container">
+            <h2>Faculty Profile</h2>
+
+            <input
+                type="text"
+                placeholder="Full Name"
+                value={profile.name}
+                onChange={e => setProfile({...profile, name: e.target.value})}
+            />
+
+            <input
+                type="email"
+                value={profile.email}
+                disabled
+            />
+
+            <input
+                type="text"
+                placeholder="Department"
+                value={profile.department}
+                onChange={e => setProfile({...profile, department: e.target.value})}
+            />
+
+            <input
+                type="text"
+                placeholder="Designation"
+                value={profile.designation}
+                onChange={e => setProfile({...profile, designation: e.target.value})}
+            />
+
+            <input
+                type="text"
+                placeholder="Phone Number"
+                value={profile.phone}
+                onChange={e => setProfile({...profile, phone: e.target.value})}
+            />
+
+            <button onClick={updateProfile}>Update Profile</button>
+            <button className="secondary" onClick={goBack}>Back to Dashboard</button>
+
+            <p className="msg" style={{ color: msgColor }}>{msg}</p>
+        </div>
+    );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<FacultyProfile />);
+</script>
+
+</body>
+</html>

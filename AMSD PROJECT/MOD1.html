@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FLMS - Auth Module (React CDN)</title>
+
+<!-- React & Babel -->
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+}
+
+.container {
+    width: 350px;
+    margin: 100px auto;
+    background: #ffffff;
+    padding: 20px;
+    box-shadow: 0 0 10px gray;
+    text-align: center;
+    border-radius: 5px;
+}
+
+h2, h3 {
+    margin-bottom: 15px;
+}
+
+input, select {
+    width: 90%;
+    padding: 8px;
+    margin: 8px 0;
+}
+
+button {
+    width: 95%;
+    padding: 8px;
+    background: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+.link {
+    color: #007bff;
+    cursor: pointer;
+}
+
+.msg {
+    color: red;
+    margin-top: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="root"></div>
+
+<script type="text/babel">
+function AuthApp() {
+    const [page, setPage] = React.useState("login");
+    const [user, setUser] = React.useState(null);
+    const [msg, setMsg] = React.useState("");
+
+    const [login, setLogin] = React.useState({
+        email: "",
+        password: ""
+    });
+
+    const [register, setRegister] = React.useState({
+        name: "",
+        email: "",
+        password: "",
+        role: ""
+    });
+
+    React.useEffect(() => {
+        const savedUser = localStorage.getItem("user");
+        if (savedUser) {
+            setUser(savedUser);
+            setPage("dashboard");
+        }
+    }, []);
+
+    const handleLogin = () => {
+        if (!login.email || !login.password) {
+            setMsg("Enter email and password");
+            return;
+        }
+        localStorage.setItem("user", login.email);
+        setUser(login.email);
+        setMsg("");
+        setPage("dashboard");
+    };
+
+    const handleRegister = () => {
+        const { name, email, password, role } = register;
+        if (!name || !email || !password || !role) {
+            setMsg("All fields are required");
+            return;
+        }
+        alert("Registration successful (Frontend only)");
+        setMsg("");
+        setPage("login");
+    };
+
+    const logout = () => {
+        localStorage.removeItem("user");
+        setUser(null);
+        setPage("login");
+    };
+
+    return (
+        <>
+        {page === "login" && (
+            <div className="container">
+                <h2>Faculty Leave Management System</h2>
+                <h3>Login</h3>
+
+                <input type="email" placeholder="Email"
+                    onChange={e => setLogin({...login, email: e.target.value})} />
+
+                <input type="password" placeholder="Password"
+                    onChange={e => setLogin({...login, password: e.target.value})} />
+
+                <button onClick={handleLogin}>Login</button>
+
+                <p className="msg">{msg}</p>
+                <p>New user? <span className="link" onClick={() => setPage("register")}>Register</span></p>
+            </div>
+        )}
+
+        {page === "register" && (
+            <div className="container">
+                <h3>User Registration</h3>
+
+                <input type="text" placeholder="Full Name"
+                    onChange={e => setRegister({...register, name: e.target.value})} />
+
+                <input type="email" placeholder="Email"
+                    onChange={e => setRegister({...register, email: e.target.value})} />
+
+                <input type="password" placeholder="Password"
+                    onChange={e => setRegister({...register, password: e.target.value})} />
+
+                <select onChange={e => setRegister({...register, role: e.target.value})}>
+                    <option value="">Select Role</option>
+                    <option value="FACULTY">Faculty</option>
+                    <option value="ADMIN">Admin</option>
+                </select>
+
+                <button onClick={handleRegister}>Register</button>
+
+                <p className="msg">{msg}</p>
+                <p>Already registered? <span className="link" onClick={() => setPage("login")}>Login</span></p>
+            </div>
+        )}
+
+        {page === "dashboard" && (
+            <div className="container">
+                <h2>Dashboard</h2>
+                <p>Logged in as: <b>{user}</b></p>
+                <button onClick={logout}>Logout</button>
+            </div>
+        )}
+        </>
+    );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<AuthApp />);
+</script>
+
+</body>
+</html>

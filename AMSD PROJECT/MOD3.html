@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Leave Application - FLMS</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #eef;
+}
+
+.box {
+    width: 400px;
+    margin: 80px auto;
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0 0 8px gray;
+}
+
+input, select, textarea, button {
+    width: 100%;
+    margin: 6px 0;
+    padding: 8px;
+}
+
+button {
+    background: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+#msg {
+    margin-top: 10px;
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+    <h2>Apply Leave</h2>
+
+    <select id="leaveType">
+        <option value="">Leave Type</option>
+        <option>Casual</option>
+        <option>Sick</option>
+        <option>Earned</option>
+    </select>
+
+    <input type="date" id="fromDate">
+    <input type="date" id="toDate">
+
+    <textarea id="reason" placeholder="Reason"></textarea>
+
+    <button id="submitBtn">Submit</button>
+
+    <p id="msg"></p>
+</div>
+
+<script>
+const leaveType = document.getElementById("leaveType");
+const fromDate = document.getElementById("fromDate");
+const toDate = document.getElementById("toDate");
+const reason = document.getElementById("reason");
+const msg = document.getElementById("msg");
+const submitBtn = document.getElementById("submitBtn");
+
+submitBtn.addEventListener("click", applyLeave);
+
+function applyLeave() {
+
+    if (!leaveType.value || !fromDate.value || !toDate.value || !reason.value.trim()) {
+        msg.style.color = "red";
+        msg.innerText = "All fields are required";
+        return;
+    }
+
+    if (fromDate.value > toDate.value) {
+        msg.style.color = "red";
+        msg.innerText = "From date cannot be after To date";
+        return;
+    }
+
+    const leave = {
+        type: leaveType.value,
+        from: fromDate.value,
+        to: toDate.value,
+        reason: reason.value,
+        status: "PENDING",
+        appliedOn: new Date().toLocaleDateString()
+    };
+
+    const leaves = JSON.parse(localStorage.getItem("leaves")) || [];
+    leaves.push(leave);
+    localStorage.setItem("leaves", JSON.stringify(leaves));
+
+    msg.style.color = "green";
+    msg.innerText = "Leave Applied Successfully";
+
+    // Reset form
+    leaveType.value = "";
+    fromDate.value = "";
+    toDate.value = "";
+    reason.value = "";
+}
+</script>
+
+</body>
+</html>
